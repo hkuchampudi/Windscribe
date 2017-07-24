@@ -1,7 +1,7 @@
 ## arg 1:  the new package version
-#post_install() {
+post_install() {
   . /etc/bash_completion.d/windscribe_complete
-#}
+}
 
 ## arg 1:  the new package version
 ## arg 2:  the old package version
@@ -16,14 +16,14 @@
 #}
 
 ## arg 1:  the old package version
-#pre_remove() {
+pre_remove() {
 	/usr/bin/windscribe logout
   systemctl stop windscribe
-#}
+}
 
 ## arg 1:  the old package version
-#post_remove() {
+post_remove() {
 	rm -rf /etc/windscribe
   rm -rf /etc/bash_completion.d/windscribe_complete
   rm -rf /var/log/windscribe
-#}
+}
