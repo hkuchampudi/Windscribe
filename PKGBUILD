@@ -1,7 +1,7 @@
 # Maintainer: Harsha Kuchampudi <harshakuchampudi@gmail.com>
 pkgname=windscribe-cli
 pkgver=1.0
-pkgrel=2
+pkgrel=3
 pkgdesc="Port of Windscribe's VPN command line interface"
 arch=('any')
 url="https://windscribe.com/"
@@ -43,6 +43,9 @@ package() {
   echo "Configuring bash completion"
   mkdir $pkgdir/etc
   cp -r "${srcdir}/data/etc/bash_completion.d" "${pkgdir}/etc/"
+  # Make windscribe directory
+  echo "Creating windscribe directory"
+  mkdir $pkgdir/etc/windscribe
   # Configure systemd service
   echo "Configuring systemd service"
   mkdir -p $pkgdir/etc/systemd/system/
