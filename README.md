@@ -9,7 +9,6 @@ This repository contains the files necessary to build Windscribe VPN CLI for Arc
 
 #### Installing From AUR
 - You install this package from the Arch User Repository (AUR) by using `yaourt` and running `yaourt -S windscribe-cli`.
-- After installing, 
 
 #### Installing From Source
 In order the install Windscribe's CLI from source, use the following instructions:
