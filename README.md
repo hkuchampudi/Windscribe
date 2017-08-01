@@ -17,7 +17,8 @@ In order the install Windscribe's CLI from source, use the following instruction
 1. Clone this repository onto your local machine.
 2. `cd` into the cloned repository.
 3. Execute `makepkg -cs` to build the package.
-4. After the build process is finished, run `sudo pacman -U windscribe-cli-1.0-1-any.pkg.tar` to install the package.
+4. After the build process is finished, run `sudo pacman -U windscribe-cli-1.0-3-any.pkg.tar` to install the 
+package.
 
 ### Running Windscribe CLI
 1. After installing for the first time, close out of any active terminals (this is so that bash autocomplete works)
