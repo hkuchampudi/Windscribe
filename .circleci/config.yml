@@ -1,0 +1,26 @@
+version: 2.0
+jobs:
+  build:
+    docker:
+      - image: base/devel:latest
+    steps:
+      - checkout
+      - run: 'pacman -Syu'
+      - run: 'pacman -S git --noconfirm'
+      - run: 'useradd -m -g wheel -s /bin/bash windscribe'
+      ## Edit sudoers file to allow wheel group members
+      - run: "sed -i '85s/.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers"
+      ## Download the windscribe-cli package from the AUR
+      - run: 'su - windscribe -c "git clone https://aur.archlinux.org/windscribe-cli.git"'
+      - run: 'su - windscribe -c "cd ~/windscribe-cli && makepkg -cs PKGBUILD --noconfirm"'
+      - run: 'su - windscribe -c "cd ~/windscribe-cli && sudo pacman -U *.pkg.tar.xz --noconfirm"'
+      ## Start tests
+      - run: '/usr/bin/windscribe start'
+      - run: 'if windscribe status | grep -q "status: running"; then echo "SUCCESS"; else exit 1; fi'
+      - run: 'if windscribe connect | grep -q "Please login to use Windscribe"; then echo "SUCCESS"; else exit 1; fi'
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
