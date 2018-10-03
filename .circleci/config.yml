@@ -4,20 +4,35 @@ jobs:
     docker:
       - image: base/devel:latest
     steps:
+      - run: 
+          name: Update Pacman
+          command: 'pacman -Syu'
+      - run: 
+          name: Install Git
+          command: 'pacman -S git --noconfirm'
+      - run: 
+          name: Create windscribe User and Add to Wheel Group
+          command: 'useradd -m -g wheel -s /bin/bash windscribe'
+      - run: 
+          name: Give Wheel Group sudoers Permission
+          command: "sed -i '85s/.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers"
       - checkout
-      - run: 'pacman -Syu'
-      - run: 'pacman -S git --noconfirm'
-      - run: 'useradd -m -g wheel -s /bin/bash windscribe'
-      ## Edit sudoers file to allow wheel group members
-      - run: "sed -i '85s/.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers"
-      ## Download the windscribe-cli package from the AUR
-      - run: 'su - windscribe -c "git clone https://aur.archlinux.org/windscribe-cli.git"'
-      - run: 'su - windscribe -c "cd ~/windscribe-cli && makepkg -cs PKGBUILD --noconfirm"'
-      - run: 'su - windscribe -c "cd ~/windscribe-cli && sudo pacman -U *.pkg.tar.xz --noconfirm"'
+      - run: 
+          name: Build PKGBUILD as windscribe User
+          command: 'su - windscribe -c "cd ~/windscribe-cli && makepkg -cs PKGBUILD --noconfirm"'
+      - run: 
+          name: Install Built Windscribe Package
+          command: 'su - windscribe -c "cd ~/windscribe-cli && sudo pacman -U *.pkg.tar.xz --noconfirm"'
       ## Start tests
-      - run: '/usr/bin/windscribe start'
-      - run: 'if windscribe status | grep -q "status: running"; then echo "SUCCESS"; else exit 1; fi'
-      - run: 'if windscribe connect | grep -q "Please login to use Windscribe"; then echo "SUCCESS"; else exit 1; fi'
+      - run: 
+          name: Start Windscribe Service
+          command: '/usr/bin/windscribe start'
+      - run: 
+          name: Check if Windscribe is Running
+          command: 'if windscribe status | grep -q "status: running"; then echo "SUCCESS"; else exit 1; fi'
+      - run: 
+          name: Check if Windscribe can Connect
+          command: 'if windscribe connect | grep -q "Please login to use Windscribe"; then echo "SUCCESS"; else exit 1; fi'
 
 workflows:
   version: 2
