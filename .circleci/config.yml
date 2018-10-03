@@ -16,13 +16,15 @@ jobs:
       - run: 
           name: Give Wheel Group sudoers Permission
           command: "sed -i '85s/.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers"
-      - checkout
+      - run:
+          name: Checkout Code from GitHub
+          command: 'su - windscribe -c "git clone https://github.com/hkuchampudi/Windscribe.git"'
       - run: 
           name: Build PKGBUILD as windscribe User
-          command: 'su - windscribe -c "cd ~/windscribe-cli && makepkg -cs PKGBUILD --noconfirm"'
+          command: 'su - windscribe -c "cd ~/Windscribe && makepkg -cs PKGBUILD --noconfirm"'
       - run: 
           name: Install Built Windscribe Package
-          command: 'su - windscribe -c "cd ~/windscribe-cli && sudo pacman -U *.pkg.tar.xz --noconfirm"'
+          command: 'su - windscribe -c "cd ~/Windscribe && sudo pacman -U *.pkg.tar.xz --noconfirm"'
       ## Start tests
       - run: 
           name: Start Windscribe Service
