@@ -6,7 +6,7 @@ jobs:
     steps:
       - run: 
           name: Update Pacman
-          command: 'pacman -Syu'
+          command: 'pacman -Syu --noconfirm'
       - run: 
           name: Install Git
           command: 'pacman -S git --noconfirm'
