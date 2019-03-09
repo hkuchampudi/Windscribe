@@ -1,30 +1,32 @@
 version: 2.0
 jobs:
   build:
+    working_directory: /windscribe-build
     docker:
-      - image: base/devel:latest
+      - image: archlinux/base:latest
     steps:
+      - checkout
       - run: 
           name: Update Pacman
           command: 'pacman -Syu --noconfirm'
       - run: 
-          name: Install Git
-          command: 'pacman -S git --noconfirm'
+          name: Install Dependencies
+          command: 'pacman -S git sudo base-devel --noconfirm'
       - run: 
           name: Create windscribe User and Add to Wheel Group
           command: 'useradd -m -g wheel -s /bin/bash windscribe'
+      - run:
+          name: Change Build Directory Ownership
+          command: 'chown -R windscribe /windscribe-build'
       - run: 
           name: Give Wheel Group sudoers Permission
           command: "sed -i '85s/.*/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers"
-      - run:
-          name: Checkout Code from GitHub
-          command: 'su - windscribe -c "git clone https://github.com/hkuchampudi/Windscribe.git"'
       - run: 
           name: Build PKGBUILD as windscribe User
-          command: 'su - windscribe -c "cd ~/Windscribe && makepkg -cs PKGBUILD --noconfirm"'
+          command: 'su - windscribe -c "cd /windscribe-build && makepkg -cs PKGBUILD --noconfirm"'
       - run: 
           name: Install Built Windscribe Package
-          command: 'su - windscribe -c "cd ~/Windscribe && sudo pacman -U *.pkg.tar.xz --noconfirm"'
+          command: 'su - windscribe -c "cd /windscribe-build && sudo pacman -U *.pkg.tar.xz --noconfirm"'
       ## Start tests
       - run: 
           name: Start Windscribe Service
