@@ -14,18 +14,20 @@ license=('GPL')
 depends=('openvpn')
 optdepends=('stunnel')
 install="windscribe-cli.install"
-source_armv6h=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_armhf.deb"
-               'windscribe.service')
-source_i686=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_i386.deb"
-             'windscribe.service')
-source_x86_64=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_amd64.deb"
-               'windscribe.service')
-sha256sums_armv6h=('af8938c03355c7523f3abbe2090cbc43b7f782c3f1caf90c19b91b03173dd524'
-                   '5be3a28e3b49a233b68ac4638bc5407e1fde043de5bfaddff00d0031947a6d06')
-sha256sums_i686=('141d9d229cd94de6d5212f909840682f5bf2d85f0de91407cf7fec28ff79161f'
-                 '5be3a28e3b49a233b68ac4638bc5407e1fde043de5bfaddff00d0031947a6d06')
-sha256sums_x86_64=('2adef3ff36423de681279a7f8ddaac29612779bdbcba9cf24098952646fa0253'
-                   '5be3a28e3b49a233b68ac4638bc5407e1fde043de5bfaddff00d0031947a6d06')
+
+# Platform specific binaries
+source_armv6h=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_armhf.deb")
+source_i686=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_i386.deb")
+source_x86_64=("${pkgname}_${pkgver}_${pkgrel}.deb::https://assets.staticnetcontent.com/desktop/linux/windscribe-cli_${pkgver//_/-}_amd64.deb")
+
+# Common files
+source=('windscribe.service')
+
+# Checksums
+sha256sums_armv6h=('af8938c03355c7523f3abbe2090cbc43b7f782c3f1caf90c19b91b03173dd524')
+sha256sums_i686=('141d9d229cd94de6d5212f909840682f5bf2d85f0de91407cf7fec28ff79161f')
+sha256sums_x86_64=('2adef3ff36423de681279a7f8ddaac29612779bdbcba9cf24098952646fa0253')
+sha256sums=('5be3a28e3b49a233b68ac4638bc5407e1fde043de5bfaddff00d0031947a6d06')
 
 package() {
   # Extract the debian package
@@ -46,7 +48,7 @@ package() {
 
   # Configure systemd service
   echo "Configuring systemd service"
-  install -Dm664 "windscribe.service" -t "${pkgdir}/usr/lib/systemd/system/"
+  install -Dm644 "windscribe.service" -t "${pkgdir}/usr/lib/systemd/system/"
   
   # Configure windscribe binary and license
   echo "Configuring binary and license"
