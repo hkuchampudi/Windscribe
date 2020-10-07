@@ -33,8 +33,8 @@ package() {
   # Extract the debian package
   echo "Extracting debian package"
   ar vx $srcdir/${pkgname}_${pkgver}_${pkgrel}.deb
-  mkdir $srcdir/data
-  mkdir $srcdir/control
+  mkdir -p $srcdir/data
+  mkdir -p $srcdir/control
   tar xf "data.tar.xz" -C "${srcdir}/data"
   tar xf "control.tar.gz" -C "${srcdir}/control"
 
